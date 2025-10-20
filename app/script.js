@@ -23,8 +23,7 @@ if (logoutBtn) {
 //Handle Logout Button End
 
 //Declare psu array and variable
-let ipduSum_arr = [0, 0, 0];
-let alarm_arr = [0, 1, 1, 1, 0];
+let alarm_arr = [0, 0, 0, 0, 0];
 
 // Chart array and variable Declare
 let temp = [30, 30, 40, 50, 80, 30, 20, 50];
@@ -44,7 +43,7 @@ let lineChart;
 // Default Data Show Start
 updateAllData(51, 20, 30, 40, 50, 60, 70);
 updateLineChart(50, 60);
-alarmData(alarm_arr, 0);
+updateAlarmData(0, 0, 0, 0, 0);
 // Default Data Show end
 
 //.........websocket_client code Start..............
@@ -63,14 +62,14 @@ socket.onmessage = function (event) {
   clearAllData();
 
   console.log(data[1]);
-  console.log(data[2]);
-  console.log(data[3]);
-  console.log(data[4]);
 
-  var splited_data = data[4].split(",");
+  var splited_data = data[1].split(",");
+
+  console.log("splited data is ", splited_data[0]);
 
   // Main Gauge
   updateAllData(
+    splited_data[0],
     splited_data[1],
     splited_data[2],
     splited_data[3],
@@ -86,24 +85,46 @@ socket.onmessage = function (event) {
   const ho_main = document.getElementById("main_ho");
   if (ho_main) {
     deviceInformation(
+      splited_data[10],
+      splited_data[11],
       splited_data[12],
       splited_data[13],
       splited_data[14],
       splited_data[15],
-      splited_data[16],
-      splited_data[17],
-      splited_data[18]
+      splited_data[16]
     );
   }
 
   // Others Alarm Unit
-  for (i = 7, j = 0; i <= 11; i++, j++) {
-    alarm_arr[j] = parseInt(splited_data[i]);
-  }
-  alarmData(alarm_arr, splited_data[1]);
-  
+  updateAlarmData(
+    splited_data[1],
+    splited_data[2],
+    splited_data[7],
+    splited_data[8],
+    splited_data[9]
+  );
 };
 //.........websocket_client code end..............
+
+//Making alarm array start
+function updateAlarmData(a, b, c, d, e) {
+  if (a > 80) {
+    alarm_arr[0] = 1;
+  } else {
+    alarm_arr[0] = 0;
+  }
+  if (b > 80) {
+    alarm_arr[1] = 1;
+  } else {
+    alarm_arr[1] = 0;
+  }
+  alarm_arr[2] = c;
+  alarm_arr[3] = d;
+  alarm_arr[4] = e;
+
+  alarmData(alarm_arr);
+}
+//Making alarm array end
 
 //Alarm data start
 function alarmData(x, input_voltage) {
@@ -122,45 +143,25 @@ function alarmData(x, input_voltage) {
     "Water Leakage",
   ];
   const alarmData = [
-    ["Tripped", "ok"],
-    ["Tripped", "ok"],
+    ["Failed", "Active"],
+    ["Failed", "Active"],
     ["Tripped", "ok"],
     ["Tripped", "ok"],
     ["Detected", "No Alarm"],
   ];
 
   for (i = 0; i <= 4; i++) {
-    //Another check for generator
-    if (i == 2 && input_voltage > 50) {
-      document.getElementById(alarmId[i]).innerText = "Stand by";
-      document.getElementById(alarmId[i]).classList.add("stand-btn");
-    } else if (i == 2) {
-      // only for generator
-      if (x[i] == 0) {
-        document.getElementById(alarmId[i]).innerText = alarmData[i][1];
-        document.getElementById(alarmId[i]).classList.add("on-btn"); //green
-      } else {
-        document.getElementById(alarmId[i]).innerText = alarmData[i][0];
-        document.getElementById(alarmId[i]).classList.add("off-btn"); //red
-        let ul = document.getElementById("alert-list");
-        let li = document.createElement("li");
-        li.classList.add("alert-list-card");
-        li.textContent = `${alarmCardId[i]} is ${alarmData[i][0]}`;
-        ul.appendChild(li);
-      }
+    if (x[i] == 1) {
+      document.getElementById(alarmId[i]).innerText = alarmData[i][1];
+      document.getElementById(alarmId[i]).classList.add("on-btn"); //green
     } else {
-      if (x[i] == 1) {
-        document.getElementById(alarmId[i]).innerText = alarmData[i][1];
-        document.getElementById(alarmId[i]).classList.add("on-btn"); //green
-      } else {
-        document.getElementById(alarmId[i]).innerText = alarmData[i][0];
-        document.getElementById(alarmId[i]).classList.add("off-btn"); //red
-        let ul = document.getElementById("alert-list");
-        let li = document.createElement("li");
-        li.classList.add("alert-list-card");
-        li.textContent = `${alarmCardId[i]} is ${alarmData[i][0]}`;
-        ul.appendChild(li);
-      }
+      document.getElementById(alarmId[i]).innerText = alarmData[i][0];
+      document.getElementById(alarmId[i]).classList.add("off-btn"); //red
+      let ul = document.getElementById("alert-list");
+      let li = document.createElement("li");
+      li.classList.add("alert-list-card");
+      li.textContent = `${alarmCardId[i]} is ${alarmData[i][0]}`;
+      ul.appendChild(li);
     }
   }
 }
@@ -382,7 +383,7 @@ function updateAllData(a, b, c, d, e, f, g) {
     gaugeAlert("Battery Voltage 1", "very Low");
   }
 
-// Battery Voltage 2 (0-280V)
+  // Battery Voltage 2 (0-280V)
   const batteryVoltage2 = e;
   updateGauge("battery-voltage2", batteryVoltage2, {
     green: [241, 280],
