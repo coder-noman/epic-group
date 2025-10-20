@@ -96,31 +96,29 @@ socket.onmessage = function (event) {
     );
   }
 
-  // power supply unit
-  psuDataInsert(data[1], data[2], data[3]);
-
   // Others Alarm Unit
   for (i = 7, j = 0; i <= 11; i++, j++) {
     alarm_arr[j] = parseInt(splited_data[i]);
   }
   alarmData(alarm_arr, splited_data[1]);
+  
 };
 //.........websocket_client code end..............
 
 //Alarm data start
 function alarmData(x, input_voltage) {
   const alarmId = [
+    "ups1-status",
+    "ups2-status",
     "ups1-cb-status",
     "ups2-cb-status",
-    "fire-Alarm",
-    "generator-status",
     "water-leakage",
   ];
   const alarmCardId = [
-    "Ups1 cb Status",
-    "Ups2 cb Status",
     "UPS1 Status",
     "UPS2 Status",
+    "Ups1 cb Status",
+    "Ups2 cb Status",
     "Water Leakage",
   ];
   const alarmData = [
@@ -246,11 +244,11 @@ function clearAllData() {
 
   // Clear alarm elements
   const alarmId = [
-    "water-leakage",
-    "fire-Alarm",
-    "generator-status",
+    "ups1-status",
+    "ups2-status",
     "ups1-cb-status",
     "ups2-cb-status",
+    "water-leakage",
   ];
   for (let j = 0; j < alarmId.length; j++) {
     const alarmElem = document.getElementById(alarmId[j]);
