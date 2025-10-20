@@ -12,12 +12,11 @@ if (path.endsWith("/app/client.html") && role !== "rakesh") {
   window.location.href = "../registration.html";
 }
 
-
 const logoutBtn = document.getElementById("log-out");
 if (logoutBtn) {
   logoutBtn.addEventListener("click", function () {
     sessionStorage.removeItem("userRole");
-    window.location.href = "../registration.html";
+    window.location.href = "../../registration.html";
   });
 }
 
@@ -27,7 +26,7 @@ if (logoutBtn) {
 let ipdu1_arr = [0, 0, 0, 0, 0, 0, 0, 0];
 let ipdu2_arr = [0, 0, 0, 0, 0, 0, 0, 0];
 let ipdu3_arr = [0, 0, 0, 0, 0, 0, 0, 0];
-let ipduSum_arr = [0, 0, 0];
+let ipduSum_arr = [0, 0];
 let alarm_arr = [0, 0, 0, 0, 0];
 
 // Chart array and variable Declare
@@ -62,25 +61,18 @@ socket.onmessage = function (event) {
   const msg = data[1] || "";
 
   // checking data is coming or not start
-  if (data_catagory == "Hams_HO") {
-    // dataReceived = true;
-    // clearTimeout(timeout);
-  } else {
+  // if (data_catagory == "Hams_HO") {
+  if (data_catagory !== "Hams_FAC1") {
     return;
   }
-  // checking data is coming or not end
-
-  // if (data_catagory !== "Hams_HO") {
-  //   return;
-  // }
 
   // Clear all data function
   clearAllData();
 
-  console.log(data[1]);
-  console.log(data[2]);
-  console.log(data[3]);
-  console.log(data[4]);
+  // console.log(data[1]);
+  // console.log(data[2]);
+  // console.log(data[3]);
+  // console.log(data[4]);
 
   var splited_data = data[4].split(",");
 
@@ -98,15 +90,19 @@ socket.onmessage = function (event) {
   updateLineChart(splited_data[5], splited_data[6]);
 
   // Device Inforfation
-  //   deviceInformation(
-  //     splited_data[12],
-  //     splited_data[13],
-  //     splited_data[14],
-  //     splited_data[15],
-  //     splited_data[16],
-  //     splited_data[17],
-  //     splited_data[18]
-  //   );
+  // declare for toggle factory and factory client
+  const factory = document.getElementById("factory");
+  if (factory) {
+    deviceInformation(
+      splited_data[12],
+      splited_data[13],
+      splited_data[14],
+      splited_data[15],
+      splited_data[16],
+      splited_data[17],
+      splited_data[18]
+    );
+  }
 
   // power supply unit
   psuDataInsert(data[1], data[2], data[3]);
@@ -148,7 +144,6 @@ function psuDataInsert(x, y, z) {
   // Sum of Ipdu
   ipduSum_arr[0] = ipdu1_arr.reduce((x, y) => x + y, 0);
   ipduSum_arr[1] = ipdu2_arr.reduce((x, y) => x + y, 0);
-  ipduSum_arr[2] = ipdu3_arr.reduce((x, y) => x + y, 0);
   updateBarChart();
 }
 function psuDataShow() {
@@ -169,14 +164,6 @@ function psuDataShow() {
     "nvr-psu",
     "r730-1-psu1",
     "r730-1-psu2",
-    "r730-2-psu1",
-    "r730-2-psu2",
-    "san-sw1-psu1",
-    "san-sw1-psu2",
-    "san-sw-psu1",
-    "san-sw-psu2",
-    "san-sorage-psu1",
-    "san-sorage-psu2",
   ];
 
   const psuDisplayId = [
@@ -196,14 +183,6 @@ function psuDataShow() {
     "nvr-d-psu",
     "r730-1-d-psu1",
     "r730-1-d-psu2",
-    "r730-2-d-psu1",
-    "r730-2-d-psu2",
-    "san-sw1-d-psu1",
-    "san-sw1-d-psu2",
-    "san-sw-d-psu1",
-    "san-sw-d-psu2",
-    "san-sorage-d-psu1",
-    "san-sorage-d-psu2",
   ];
   const psuCardData = [
     "BGP PSU1",
@@ -222,14 +201,6 @@ function psuDataShow() {
     "NVR PSU",
     "R 730 1 PSU1",
     "R 730 1 PSU2",
-    "R 730 2 PSU1",
-    "R 730 2 PSU2",
-    "SAN SW 1 PSU1",
-    "SAN SW 1 PSU2",
-    "SAN SW PSU1",
-    "SAN SW PSU2",
-    "SAN SORAGE PSU1",
-    "SAN SORAGE PSU2",
   ];
   // ipdu 1 Data show
   for (i = 0, j = 0; i <= 7; i++, j++) {
@@ -249,14 +220,14 @@ function psuDataShow() {
     }
   }
 
-  // ipdu 3 Data show
-  for (i = 0, j = 16; i <= 7; i++, j++) {
-    if (ipdu3_arr[i] >= 1) {
-      psuOnShowData(psuId[j], psuDisplayId[j], ipdu3_arr[i]);
-    } else {
-      psuOffShowData(psuId[j], psuCardData[j]);
-    }
-  }
+  // // ipdu 3 Data show
+  // for (i = 0, j = 16; i <= 7; i++, j++) {
+  //   if (ipdu3_arr[i] >= 1) {
+  //     psuOnShowData(psuId[j], psuDisplayId[j], ipdu3_arr[i]);
+  //   } else {
+  //     psuOffShowData(psuId[j], psuCardData[j]);
+  //   }
+  // }
 }
 
 //Psu On Show Data Funtion
@@ -307,8 +278,8 @@ function alarmData(x, input_voltage) {
     if (i == 2 && input_voltage > 50) {
       document.getElementById(alarmId[i]).innerText = "Stand by";
       document.getElementById(alarmId[i]).classList.add("stand-btn");
-    } 
-    else if(i==2){   // only for generator
+    } else if (i == 2) {
+      // only for generator
       if (x[i] == 0) {
         document.getElementById(alarmId[i]).innerText = alarmData[i][1];
         document.getElementById(alarmId[i]).classList.add("on-btn"); //green
@@ -321,8 +292,7 @@ function alarmData(x, input_voltage) {
         li.textContent = `${alarmCardId[i]} is ${alarmData[i][0]}`;
         ul.appendChild(li);
       }
-    }
-    else {
+    } else {
       if (x[i] == 1) {
         document.getElementById(alarmId[i]).innerText = alarmData[i][1];
         document.getElementById(alarmId[i]).classList.add("on-btn"); //green
@@ -349,6 +319,67 @@ function gaugeAlert(data, status) {
   ul.appendChild(li);
 }
 //Gauge alert end
+
+// device Information start
+function deviceInformation(lan, gsmOp, gsmSig, ib, psu1, psu2, ds) {
+  const lanIp = document.getElementById("device-lan");
+  const gsmOperator = document.getElementById("gsm-operator");
+  const gsmSignal = document.getElementById("gsm-signal");
+  const internalBattery = document.getElementById("internal-battery");
+  const devicePsu1 = document.getElementById("device-psu1");
+  const devicePsu2 = document.getElementById("device-psu2");
+  const dataSource = document.getElementById("data-source");
+
+  // Lan IP
+  lanIp.innerHTML = `: ${lan}`;
+
+  // Gsm Operator
+  gsmOperator.innerText = `: ${gsmOp}`;
+
+  // if(gsmOp == 0){
+  //   gsmOperator.innerText = ': Not Found';
+  // }else if(gsmOp == 1){
+  //   gsmOperator.innerText = ': GP';
+  // }else if(gsmOp == 2){
+  //   gsmOperator.innerText = ': Robi';
+  // }else if(gsmOp == 3){
+  //   gsmOperator.innerText = ': Banglalink';
+  // }else if(gsmOp == 4){
+  //   gsmOperator.innerText = ': Airtel';
+  // }else if(gsmOp == 5){
+  //   gsmOperator.innerText = ': Teletalk';
+  // }
+
+  // Gsm Signal
+  gsmSignal.innerText = `: ${gsmSig} %`;
+
+  // Internal Battery
+  internalBattery.innerText = `: ${ib} V`;
+
+  // Psu Stutus 1
+  if (psu1 == 1) {
+    devicePsu1.innerText = `: OK`;
+  } else {
+    devicePsu1.innerText = `: Failed`;
+  }
+
+  // Psu Stutus 2
+  if (psu2 == 1) {
+    devicePsu2.innerText = `: OK`;
+  } else {
+    devicePsu2.innerText = `: Failed`;
+  }
+
+  // Data Source
+  if (ds == 0) {
+    dataSource.innerText = `: LAN`;
+  } else if (ds == 1) {
+    dataSource.innerText = `: WIFI`;
+  } else if (ds == 2) {
+    dataSource.innerText = `: GPRS`;
+  }
+}
+// device Information end
 
 // clear all data function start
 function clearAllData() {
@@ -587,7 +618,7 @@ function updateAllData(a, b, c, d, e, f) {
     max: 100,
   });
 
-    // Alert for Humidity
+  // Alert for Humidity
   if (humidity >= 0 && humidity <= 40) {
     gaugeAlert("Humidity", "low");
   } else if (humidity >= 81 && humidity <= 100) {
@@ -698,7 +729,7 @@ function initializeCharts() {
   barChart = new Chart(voltageCtx, {
     type: "bar",
     data: {
-      labels: ["Ipdu1", "Ipdu2", "Ipdu3"],
+      labels: ["Ipdu1", "Ipdu2"],
       datasets: [
         {
           label: "Load (VA)",
@@ -709,6 +740,7 @@ function initializeCharts() {
             "#3a67d1af",
           ],
           borderRadius: 10,
+          barThickness: 70,
         },
       ],
     },
@@ -757,8 +789,8 @@ function updateLineChart(x, y) {
   //getting time
   let z = new Date().toLocaleTimeString();
   let date = new Date().toLocaleDateString();
-  
-  //last Update/synced 
+
+  //last Update/synced
   document.getElementById("lastUpdateTime").textContent = z;
   document.getElementById("lastUpdateDate").textContent = date;
 

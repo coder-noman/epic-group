@@ -39,7 +39,6 @@ const tim = [
   "11:30",
   "11:35",
 ];
-let barChart;
 let lineChart;
 
 // Default Data Show Start
@@ -49,68 +48,63 @@ alarmData(alarm_arr, 0);
 // Default Data Show end
 
 //.........websocket_client code Start..............
-// var socket = new WebSocket("ws://27.147.170.162:81");
-// socket.onmessage = function (event) {
-//   const data = event.data.split(":");
-//   const data_catagory = data[0] || "";
-//   const msg = data[1] || "";
+var socket = new WebSocket("ws://27.147.170.162:81");
+socket.onmessage = function (event) {
+  const data = event.data.split(":");
+  const data_catagory = data[0] || "";
+  const msg = data[1] || "";
 
-//   // checking data is coming or not start
-//   if (data_catagory == "Hams_HO") {
-//     // dataReceived = true;
-//     // clearTimeout(timeout);
-//   } else {
-//     return;
-//   }
-//   // checking data is coming or not end
+  // checking data is coming or not start
+  if (data_catagory !== "Epic_HO") {
+    return;
+  }
 
-//   // if (data_catagory !== "Hams_HO") {
-//   //   return;
-//   // }
+  // Clear all data function
+  clearAllData();
 
-//   // Clear all data function
-//   clearAllData();
+  console.log(data[1]);
+  console.log(data[2]);
+  console.log(data[3]);
+  console.log(data[4]);
 
-//   console.log(data[1]);
-//   console.log(data[2]);
-//   console.log(data[3]);
-//   console.log(data[4]);
+  var splited_data = data[4].split(",");
 
-//   var splited_data = data[4].split(",");
+  // Main Gauge
+  updateAllData(
+    splited_data[1],
+    splited_data[2],
+    splited_data[3],
+    splited_data[4],
+    splited_data[5],
+    splited_data[6]
+  );
 
-//   // Main Gauge
-//   updateAllData(
-//     splited_data[1],
-//     splited_data[2],
-//     splited_data[3],
-//     splited_data[4],
-//     splited_data[5],
-//     splited_data[6]
-//   );
+  // Line chart Data
+  updateLineChart(splited_data[5], splited_data[6]);
 
-//   // Line chart Data
-//   updateLineChart(splited_data[5], splited_data[6]);
+  // Device Inforfation
+  const ho_main = document.getElementById("main_ho");
+  if (ho_main) {
+    deviceInformation(
+      splited_data[12],
+      splited_data[13],
+      splited_data[14],
+      splited_data[15],
+      splited_data[16],
+      splited_data[17],
+      splited_data[18]
+    );
+  }
 
-//   // Device Inforfation
-//   deviceInformation(
-//     splited_data[12],
-//     splited_data[13],
-//     splited_data[14],
-//     splited_data[15],
-//     splited_data[16],
-//     splited_data[17],
-//     splited_data[18]
-//   );
+  // power supply unit
+  psuDataInsert(data[1], data[2], data[3]);
 
-//   // power supply unit
-//   psuDataInsert(data[1], data[2], data[3]);
-
-//   // Others Alarm Unit
-//   for (i = 7, j = 0; i <= 11; i++, j++) {
-//     alarm_arr[j] = parseInt(splited_data[i]);
-//   }
-//   alarmData(alarm_arr, splited_data[1]);
-// };
+  // Others Alarm Unit
+  for (i = 7, j = 0; i <= 11; i++, j++) {
+    alarm_arr[j] = parseInt(splited_data[i]);
+  }
+  alarmData(alarm_arr, splited_data[1]);
+};
 //.........websocket_client code end..............
 
 //Alarm data start
@@ -374,24 +368,40 @@ function updateAllData(a, b, c, d, e, f, g) {
     gaugeAlert("UPS2 Voltage", "high");
   }
 
-  // Battery Voltage (0-60V)
-  const batteryVoltage = d;
-  updateGauge("battery-voltage", batteryVoltage, {
+  // Battery Voltage 1 (0-280V)
+  const batteryVoltage1 = d;
+  updateGauge("battery-voltage1", batteryVoltage1, {
     green: [241, 280],
     orange: [221, 240],
     red: [0, 220],
     max: 280,
   });
 
-  // Alert for Battery Voltage
-  if (batteryVoltage >= 221 && batteryVoltage <= 240) {
-    gaugeAlert("Battery Voltage", "low");
-  } else if (batteryVoltage >= 0 && batteryVoltage <= 220) {
-    gaugeAlert("Battery Voltage", "very Low");
+  // Alert for Battery Voltage 1
+  if (batteryVoltage1 >= 221 && batteryVoltage1 <= 240) {
+    gaugeAlert("Battery Voltage 1", "low");
+  } else if (batteryVoltage1 >= 0 && batteryVoltage1 <= 220) {
+    gaugeAlert("Battery Voltage 1", "very Low");
+  }
+
+// Battery Voltage 2 (0-280V)
+  const batteryVoltage2 = e;
+  updateGauge("battery-voltage2", batteryVoltage2, {
+    green: [241, 280],
+    orange: [221, 240],
+    red: [0, 220],
+    max: 280,
+  });
+
+  // Alert for Battery Voltage 2
+  if (batteryVoltage2 >= 221 && batteryVoltage2 <= 240) {
+    gaugeAlert("Battery Voltage 2", "low");
+  } else if (batteryVoltage2 >= 0 && batteryVoltage2 <= 220) {
+    gaugeAlert("Battery Voltage 2", "very Low");
   }
 
   // Temperature (0-55°C)
-  const temperature = e;
+  const temperature = f;
   updateGauge("temperature", temperature, {
     green: [0, 25],
     orange: [26, 31],
@@ -407,7 +417,7 @@ function updateAllData(a, b, c, d, e, f, g) {
   }
 
   // Humidity (0-100%)
-  const humidity = f;
+  const humidity = g;
   updateGauge("humidity", humidity, {
     green: [41, 80],
     orange: [81, 100],
@@ -419,21 +429,6 @@ function updateAllData(a, b, c, d, e, f, g) {
   if (humidity >= 0 && humidity <= 40) {
     gaugeAlert("Humidity", "low");
   } else if (humidity >= 81 && humidity <= 100) {
-    gaugeAlert("Humidity", "high");
-  }
-  // Humidity (0-100%)
-  const humidity2 = g;
-  updateGauge("humidity2", humidity2, {
-    green: [41, 80],
-    orange: [81, 100],
-    red: [0, 40],
-    max: 100,
-  });
-
-  // Alert for Humidity
-  if (humidity2 >= 0 && humidity2 <= 40) {
-    gaugeAlert("Humidity", "low");
-  } else if (humidity2 >= 81 && humidity2 <= 100) {
     gaugeAlert("Humidity", "high");
   }
 }

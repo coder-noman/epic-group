@@ -136,7 +136,7 @@
 
       <!-- Main -->
       <main>
-        <!-- Gauge card start -->
+          <!-- Gauge card start -->
         <div class="gauges-container">
           <div class="gauge-card">
             <h3 class="gauge-title">
@@ -205,6 +205,48 @@
 
           <div class="gauge-card">
             <h3 class="gauge-title">
+              <i class="fas fa-battery-full"></i> Battery Voltage 1
+            </h3>
+            <div class="gauge">
+              <div class="gauge-bg">
+                <div class="gauge-fill" id="battery-voltage1-fill"></div>
+              </div>
+              <div class="gauge-center">
+                <div class="gauge-value" id="battery-voltage1-value">
+                  0<span class="gauge-unit">V</span>
+                </div>
+                <div class="gauge-minmax">
+                  <span>0V</span>
+                  <span>280V</span>
+                </div>
+              </div>
+            </div>
+            <div class="status status-normal" id="battery-voltage1-status">
+              Normal
+            </div>
+          </div>
+
+          <div class="gauge-card">
+            <h3 class="gauge-title"><i class="fas fa-battery-full"></i> Battery Voltage 2</h3>
+            <div class="gauge">
+              <div class="gauge-bg">
+                <div class="gauge-fill" id="battery-voltage2-fill"></div>
+              </div>
+              <div class="gauge-center">
+                <div class="gauge-value" id="battery-voltage2-value">
+                  0<span class="gauge-unit">V</span>
+                </div>
+                <div class="gauge-minmax">
+                  <span>0V</span>
+                  <span>280V</span>
+                </div>
+              </div>
+            </div>
+            <div class="status status-normal" id="battery-voltage2-status">Normal</div>
+          </div>
+
+          <div class="gauge-card">
+            <h3 class="gauge-title">
               <i class="fas fa-temperature-high"></i> Temperature
             </h3>
             <div class="gauge">
@@ -243,48 +285,6 @@
               </div>
             </div>
             <div class="status status-normal" id="humidity-status">Normal</div>
-          </div>
-
-          <div class="gauge-card">
-            <h3 class="gauge-title">
-              <i class="fas fa-battery-full"></i> Battery Voltage 1
-            </h3>
-            <div class="gauge">
-              <div class="gauge-bg">
-                <div class="gauge-fill" id="battery-voltage-fill"></div>
-              </div>
-              <div class="gauge-center">
-                <div class="gauge-value" id="battery-voltage-value">
-                  0<span class="gauge-unit">V</span>
-                </div>
-                <div class="gauge-minmax">
-                  <span>0V</span>
-                  <span>280V</span>
-                </div>
-              </div>
-            </div>
-            <div class="status status-normal" id="battery-voltage-status">
-              Normal
-            </div>
-          </div>
-
-          <div class="gauge-card">
-            <h3 class="gauge-title"><i class="fas fa-battery-full"></i> Battery Voltage 2</h3>
-            <div class="gauge">
-              <div class="gauge-bg">
-                <div class="gauge-fill" id="humidity2-fill"></div>
-              </div>
-              <div class="gauge-center">
-                <div class="gauge-value" id="humidity2-value">
-                  0<span class="gauge-unit">V</span>
-                </div>
-                <div class="gauge-minmax">
-                  <span>0V</span>
-                  <span>280V</span>
-                </div>
-              </div>
-            </div>
-            <div class="status status-normal" id="humidity2-status">Normal</div>
           </div>
         </div>
         <!-- Gauge card end -->
