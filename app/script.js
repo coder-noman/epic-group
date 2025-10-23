@@ -26,8 +26,8 @@ if (logoutBtn) {
 let alarm_arr = [0, 0, 0, 0, 0];
 
 // Chart array and variable Declare
-let temp = [30, 30, 40, 50, 80, 30, 20, 50];
-let hum = [60, 60, 60, 90, 70, 10, 30, 60];
+let temp = [0, 0, 0, 0, 0, 0, 0, 0];
+let hum = [0, 0, 0, 0, 0, 0, 0, 0];
 const tim = [
   "11:00",
   "11:05",
@@ -41,8 +41,8 @@ const tim = [
 let lineChart;
 
 // Default Data Show Start
-updateAllData(51, 20, 30, 40, 50, 60, 70);
-updateLineChart(50, 60);
+updateAllData(0, 0, 0, 0, 0, 0, 0);
+updateLineChart(0, 0);
 updateAlarmData(0, 0, 0, 0, 0);
 // Default Data Show end
 
@@ -75,23 +75,23 @@ socket.onmessage = function (event) {
     splited_data[3],
     splited_data[4],
     splited_data[5],
-    splited_data[6]
+    splited_data[7]
   );
 
   // Line chart Data
-  updateLineChart(splited_data[5], splited_data[6]);
+  updateLineChart(splited_data[5], splited_data[7]);
 
   // Device Inforfation
   const ho_main = document.getElementById("main_ho");
   if (ho_main) {
     deviceInformation(
-      splited_data[10],
-      splited_data[11],
-      splited_data[12],
-      splited_data[13],
       splited_data[14],
       splited_data[15],
-      splited_data[16]
+      splited_data[16],
+      splited_data[17],
+      splited_data[18],
+      splited_data[19],
+      splited_data[20]
     );
   }
 
@@ -99,8 +99,8 @@ socket.onmessage = function (event) {
   updateAlarmData(
     splited_data[1],
     splited_data[2],
-    splited_data[7],
-    splited_data[8],
+    splited_data[12],
+    splited_data[13],
     splited_data[9]
   );
 };
