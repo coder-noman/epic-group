@@ -74,8 +74,8 @@ socket.onmessage = function (event) {
     splited_data[2],
     splited_data[3],
     splited_data[4],
-    splited_data[5],
-    splited_data[7]
+    splited_data[6],
+    splited_data[8]
   );
 
   // Line chart Data
