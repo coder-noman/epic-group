@@ -367,13 +367,13 @@ function updateAllData(a, b, c, d, e, f, g) {
     gaugeAlert("UPS2 Voltage", "high");
   }
 
-  // Battery Voltage 1 (0-280V)
+  // Battery Voltage 1 (0-220V)
   const batteryVoltage1 = d;
   updateGauge("battery-voltage1", batteryVoltage1, {
-    green: [241, 280],
-    orange: [221, 240],
-    red: [0, 220],
-    max: 280,
+    green: [193, 220],
+    orange: [185, 192],
+    red: [0, 184],
+    max: 220,
   });
 
   // Alert for Battery Voltage 1
@@ -383,13 +383,13 @@ function updateAllData(a, b, c, d, e, f, g) {
     gaugeAlert("Battery Voltage 1", "very Low");
   }
 
-  // Battery Voltage 2 (0-280V)
+  // Battery Voltage 2 (0-220V)
   const batteryVoltage2 = e;
   updateGauge("battery-voltage2", batteryVoltage2, {
-    green: [241, 280],
-    orange: [221, 240],
-    red: [0, 220],
-    max: 280,
+    green: [193, 220],
+    orange: [185, 192],
+    red: [0, 184],
+    max: 220,
   });
 
   // Alert for Battery Voltage 2
