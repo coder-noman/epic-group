@@ -1,7 +1,7 @@
 const validUsername = "admin";
 const validPassword = "1745#";
-const validClientUsername = "rakesh";
-const validClientPassword = "rakesh007#";
+const validClientUsername = "admin";
+const validClientPassword = "Imam007";
 
 document
   .getElementById("login-form")
