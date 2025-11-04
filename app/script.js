@@ -377,9 +377,9 @@ function updateAllData(a, b, c, d, e, f, g) {
   });
 
   // Alert for Battery Voltage 1
-  if (batteryVoltage1 >= 221 && batteryVoltage1 <= 240) {
+  if (batteryVoltage1 >= 185 && batteryVoltage1 <= 192) {
     gaugeAlert("Battery Voltage 1", "low");
-  } else if (batteryVoltage1 >= 0 && batteryVoltage1 <= 220) {
+  } else if (batteryVoltage1 >= 0 && batteryVoltage1 <= 184) {
     gaugeAlert("Battery Voltage 1", "very Low");
   }
 
@@ -393,9 +393,9 @@ function updateAllData(a, b, c, d, e, f, g) {
   });
 
   // Alert for Battery Voltage 2
-  if (batteryVoltage2 >= 221 && batteryVoltage2 <= 240) {
+  if (batteryVoltage2 >= 185 && batteryVoltage2 <= 192) {
     gaugeAlert("Battery Voltage 2", "low");
-  } else if (batteryVoltage2 >= 0 && batteryVoltage2 <= 220) {
+  } else if (batteryVoltage2 >= 0 && batteryVoltage2 <= 184) {
     gaugeAlert("Battery Voltage 2", "very Low");
   }
 
